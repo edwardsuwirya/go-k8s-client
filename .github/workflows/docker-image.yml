@@ -1,11 +1,9 @@
 name: Docker Image CI
 
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Image version'
-        required: true
+  push:
+    tags:
+      - '*.*.*'
 
 jobs:
   build:
@@ -24,7 +22,7 @@ jobs:
       run: doctl registry login
     - name: Tag image 
       run:
-          docker tag simple-go-client registry.digitalocean.com/enigmacamp/simple-go-client:${{ github.event.inputs.version }}
+          docker tag simple-go-client registry.digitalocean.com/enigmacamp/simple-go-client:${{ github.ref_name }}
     - name: Push image to DO Container Registry 
-      run: docker push registry.digitalocean.com/enigmacamp/simple-go-client:${{ github.event.inputs.version }}
+      run: docker push registry.digitalocean.com/enigmacamp/simple-go-client:${{ github.ref_name }}
 
